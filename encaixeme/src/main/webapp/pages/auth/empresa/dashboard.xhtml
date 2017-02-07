@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns:p="http://primefaces.org/ui"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<div id="wrapper">
+		<f:metadata>
+			<f:viewParam 
+				name="qualquercoisa" />
+			<f:event 
+				listener="#{dashboardBean.montarDadosEmpresa()}" 
+				type="preRenderView" />
+		</f:metadata>
+
+		<ui:include src="/pages/auth/empresa/sidebar.xhtml" />
+
+		<p:outputPanel id="agendas-box">
+			<div id="page-content-wrapper">
+				<p:growl 
+					autoUpdate="true" 
+					life="4000" />
+
+				<div class="container-fluid">
+					<a href="#menu-toggle" id="menu-toggle">
+						<img 
+							alt="Botão para minimizar a aba de utilidades do sistema" 
+							class="logo" 
+							jsf:library="img" 
+							jsf:name="bt_toggle.png" />
+					</a>
+
+					<form jsf:id="frm-resultado-agendas" prependId="false">
+						<ui:repeat var="agenda" value="#{dashboardBean.form.agendasDaEmpresa}">
+							<div class="col-lg-4 box-dashboard">
+								<div class="dash-title">
+									<h1>#{agenda.titulo}</h1>
+								</div>
+
+								<div class="dash-cont">
+									<h2>
+										<span>criador:</span> #{agenda.razaoSocial}
+									</h2>
+
+									<em>
+										<i></i>
+									</em>
+
+									<div class="left">
+										<div class="ativos">
+											<h4>agendamentos ativos</h4>
+											<h3>#{agenda.quantidadeConcluida}</h3>
+										</div>
+
+										<div class="vagos">
+											<h4>horários vagos</h4>
+											<h3>#{agenda.quantidadeAtiva}</h3>
+										</div>
+									</div>
+
+									<div class="right">
+										<h5>
+											<i class="fa fa-users" aria-hidden="true" />
+											<p:commandLink
+												actionListener="#{dashboardBean.formataSecretarias(agenda.idAgenda)}"
+												oncomplete="PF('dlgSecretarias').show();"
+												update="panel-dialog-secretarias" value="secretárias ativas">
+											</p:commandLink>
+										</h5>
+									</div>
+								</div><!-- fim dash cont -->
+
+								<div class="dash-foot clear">
+									<p>
+										<span>#{agenda.categoria} - #{agenda.especialidade}</span>
+									</p>
+								</div>
+							</div><!-- FIM BOX DASHBOARD -->
+						</ui:repeat>
+					</form>
+				</div>
+			</div>
+		</p:outputPanel>
+	</div><!-- /#wrapper -->
+
+	<p:outputPanel id="panel-dialog-secretarias">
+		<form jsf:id="frm-dialog-secretarias" jsf:prependId="false">
+			<p:dialog id="dialog-secretarias" draggable="false"
+				header="Secretarias" modal="true" widgetVar="dlgSecretarias"
+				resizable="false" responsive="true">
+				<div class="secretarias">
+					<h5>#{dashboardBean.form.secretarias}</h5>
+				</div>
+			</p:dialog>
+		</form>
+	</p:outputPanel>
+</html>

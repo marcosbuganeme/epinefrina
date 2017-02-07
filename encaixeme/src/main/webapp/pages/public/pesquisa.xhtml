@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html 
+	lang="pt" 
+	xmlns:p="http://primefaces.org/ui"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<head jsf:id="head">
+		<title>Encaixe-me</title>
+
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link jsf:library="css" jsf:name="bootstrap.min.css" type="text/css" />
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	    <![endif]-->
+
+		<link jsf:library="webjars" jsf:name="font-awesome/4.6.3/css/font-awesome-jsf.css" type="text/css" />
+		<link jsf:library="css" jsf:name="padrao/style.css" rel="stylesheet" type="text/css" />
+		<link jsf:library="css" jsf:name="padrao/customizacao.css" rel="stylesheet" type="text/css" />
+		<link jsf:library="css" jsf:name="normalize.css" rel="stylesheet" type="text/css" />
+	</head>
+
+	<body class="container-fluid pg-pesquisa" jsf:id="body">
+		<p:ajaxStatus 
+			onstart="PF('statusDialog').show()" 
+			onsuccess="PF('statusDialog').hide()" />
+
+ 		<p:dialog 
+ 			widgetVar="statusDialog" 
+ 			modal="true" 
+ 			draggable="false" 
+ 			closable="false" 
+ 			resizable="false" 
+ 			showHeader="false">
+		        <h:graphicImage library="img" name="loading128x128.gif" />
+		</p:dialog>
+
+		<div class="pre-header">
+			<div class="col-md-3" />
+			<div class="col-md-9" />
+		</div>
+
+		<header class="row">
+			<div class="col-md-3">
+				<nav class="menu"></nav>
+			</div>
+
+			<div class="col-md-6 marca">
+				<img alt="Logo marca do encaixe-me" class="logo" jsf:library="img" jsf:name="logo_encaixe-me.png" />
+			</div>
+
+			<div class="col-md-3">
+				<div class="side-menu">
+					<a jsf:outcome="/pages/public/cadastro/assistido">
+						<div class="cadastrar">
+							<h3>cadastrar</h3>
+						</div>
+					</a>
+
+					<a jsf:outcome="/pages/public/login">
+						<div class="login">
+							<h3>login</h3>
+						</div>
+					</a>
+				</div>
+			</div>
+		</header>
+
+		<main class="row">
+			<f:metadata>
+				<f:viewParam name="qualquercoisa" />
+				<f:event listener="#{buscaOfertaBean.iniciar()}" type="preRenderView" />
+			</f:metadata>
+
+			<div class="box-perfil">
+				<div class="title-perfil">
+					<h2>
+						Problemas ao marcar seu exame ou consulta?
+					</h2>
+
+					<h4>
+						Use o Encaixe-me e encontre o melhor horário para encaixar
+						um exame ou uma consulta na disponibilidade de seu dia a dia.
+					</h4>
+
+					<p>
+						Não perca mais tempo procurando onde e como realizar sua
+						consulta ou exame ideal. O Encaixe-me encontra o melhor horário e
+						nos melhores estabelecimentos, à sua escolha, para você fazer seu
+						exame ou sua consulta de forma prática e simples.
+					</p>
+
+					<h5>
+						Preencha o formulário abaixo e Encaixe-se!
+					</h5>
+				</div>
+
+				<form class="form-pesquisa" jsf:id="frm-pesquisa" jsf:prependId="false">
+					<div class="col-md-12">
+						<p:messages 
+							autoUpdate="true" 
+							closable="true" 
+							style="width: 100% !important" />
+					</div>
+
+					<div class="col-md-6">
+						<h:selectOneMenu id="categoria" 
+							converter="omnifaces.SelectItemsConverter"
+							styleClass="form-control" 
+							value="#{buscaOfertaBean.form.filtro.categoria}">
+							<f:selectItem 
+								itemLabel="Qual categoria?"
+								noSelectionOption="true" />
+							<f:selectItems 
+								itemLabel="#{categoria.nome}" 
+								itemValue="#{categoria}" var="categoria" 
+								value="#{buscaOfertaBean.form.categorias}" />
+							<p:ajax 
+								listener="#{buscaOfertaBean.preparaExamesRelacionados()}" 
+								update="panel-especialidade corpo"
+								process="@this" />
+						</h:selectOneMenu>
+					</div>
+
+					<div class="col-md-6">
+						<p:outputPanel id="panel-especialidade">
+							<p:selectOneMenu id="especialidade" 
+								converter="omnifaces.SelectItemsConverter"
+								disabled="#{buscaOfertaBean.form.desabilitaComboboxEspecialidade}"
+								filter="true" styleClass="combo100"
+								value="#{buscaOfertaBean.form.filtro.especialidade}">
+								<f:selectItem 
+									itemLabel="Qual especialidade?"
+									noSelectionOption="true" />
+								<f:selectItems 
+									itemLabel="#{especialidade.nome}"
+									itemValue="#{especialidade}" 
+									var="especialidade" 
+									value="#{buscaOfertaBean.form.especialidades}" />
+								<p:ajax 
+									listener="#{buscaOfertaBean.preparaPartesDoCorpoRelacionadas()}" 
+									update="corpo" />
+							</p:selectOneMenu>
+						</p:outputPanel>
+					</div>
+
+					<div class="col-md-6">
+						<h:selectOneMenu id="corpo" 
+							converter="omnifaces.SelectItemsConverter"
+							disabled="#{buscaOfertaBean.form.desabilitaComboboxCorpo}"
+							styleClass="form-control"
+							value="#{buscaOfertaBean.form.filtro.corpo}">
+							<f:selectItem 
+								itemLabel="-- partes do corpo --"
+								noSelectionOption="true" />
+							<f:selectItems 
+								itemLabel="#{corpo.nome} #{corpo.complemento}"
+								itemValue="#{corpo}" var="corpo" 
+								value="#{buscaOfertaBean.form.corpos}" />
+						</h:selectOneMenu>
+					</div>
+
+					<div class="col-md-6">
+						<p:selectOneMenu id="plano" 
+							converter="omnifaces.SelectItemsConverter" filter="true"
+							styleClass="combo100"
+							value="#{buscaOfertaBean.form.filtro.planoSaude}">
+							<f:selectItem 
+								itemLabel="Qualquer plano de saúde" />
+							<f:selectItems 
+								itemLabel="#{plano.nome}"
+								itemValue="#{plano}" var="plano" 
+								value="#{buscaOfertaBean.form.planos}" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="col-md-6">
+						<h:selectOneMenu id="periodo" 
+							converter="omnifaces.GenericEnumConverter" 
+							styleClass="form-control"
+							value="#{buscaOfertaBean.form.filtro.periodo}">
+							<f:selectItem 
+								itemLabel="Qualquer periodo do dia" />
+							<f:selectItems 
+								itemLabel="#{periodo.descricao}"
+								itemValue="#{periodo}" var="periodo" 
+								value="#{buscaOfertaBean.form.periodos}" />
+						</h:selectOneMenu>
+					</div>
+
+					<div class="col-md-6">
+						<h:selectOneMenu id="semana" 
+							converter="omnifaces.GenericEnumConverter" 
+							styleClass="form-control"
+							value="#{buscaOfertaBean.form.filtro.semana}">
+							<f:selectItem 
+								itemLabel="Qualquer dia da semana" />
+							<f:selectItems 
+								itemLabel="#{semana.descricao}"
+								itemValue="#{semana}" var="semana" 
+								value="#{buscaOfertaBean.form.semanas}" />
+						</h:selectOneMenu>
+					</div>
+
+					<div class="botao-pesquisa">
+						<h:commandLink
+							action="#{buscaOfertaBean.redirecionar()}"
+							id="btn-pesquisa">
+							<img 
+								alt="Botão para pesquisar os horário da agenda eletrônica dos estabelecimentos"
+								data-toggle="tooltip" 
+								data-placement="bottom"
+								jsf:library="img" 
+								jsf:name="bt-pesquisa-encaixe-me.png"
+								title="Clique para visualizar os horários disponíveis da sua cidade" />
+							<f:param name="filtro" value="#{buscaOfertaBean.form.filtro}" />
+						</h:commandLink>
+					</div>
+				</form>
+			</div>
+		</main>
+
+		<h:outputScript library="primefaces" name="jquery/jquery.js" />
+		<script jsf:library="js" jsf:name="bootstrap.min.js" type="text/javascript" />
+	</body>
+</html>

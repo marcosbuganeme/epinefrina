@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html 
+	lang="pt" 
+	xmlns:p="http://primefaces.org/ui"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<head jsf:id="head">
+		<ui:insert name="titulo" />
+
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link jsf:library="css" jsf:name="bootstrap.min.css" type="text/css" />
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	    <![endif]-->
+
+		<link jsf:library="css" jsf:name="font-awesome.min.css" type="text/css" />
+
+		<link jsf:library="css" jsf:name="padrao/style.css" rel="stylesheet" type="text/css" />
+		<link jsf:library="css" jsf:name="padrao/customizacao.css" rel="stylesheet" type="text/css" />
+		<link jsf:library="css" jsf:name="normalize.css" rel="stylesheet" type="text/css" />
+	</head>
+
+	<ui:insert name="body">
+		<body class="container-fluid pg-pesquisa" jsf:id="body">
+			<div class="pre-header">
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-9">
+				</div>
+			</div>
+
+			<ui:insert name="pesquisa" />
+
+			<ui:insert name="breadcrumb">
+				<section class="row info-pag">
+					<div class="col-md-3 back">
+						<ui:insert name="botao-back">
+							<a href="javascript:window.history.go(-1)">
+								<img alt="Botão para voltar a página" jsf:library="img" jsf:name="back.png" />
+							</a>
+						</ui:insert>
+					</div>
+
+					<div class="col-md-6">
+						<ui:insert name="titulo-pagina">
+							<h1>Título da Página</h1>
+						</ui:insert>
+					</div>
+
+					<div class="col-md-3">
+					</div>
+				</section>
+
+				<section class="row">
+					<div class="breadcrumb">
+						<script type="text/javascript">
+		    				breadcrumbs();
+			        	</script>
+					</div>
+				</section>
+			</ui:insert>
+
+			<main class="row">
+				<p:growl autoUpdate="true" life="8400" />
+				<p:messages autoUpdate="true" closable="true" />
+				<ui:insert name="main" />
+			</main>
+
+			<ui:include src="/WEB-INF/decorador/footer.xhtml" />
+
+			<ui:insert name="jquery">
+				<h:outputScript library="primefaces" name="jquery/jquery.js" />
+			</ui:insert>
+
+			<script jsf:library="js" jsf:name="bootstrap.min.js" type="text/javascript" />
+			<script jsf:library="js" jsf:name="autoBreadcrumbs.js" type="text/javascript" />
+			<script jsf:library="js" jsf:name="calendario-primefaces.js" type="text/javascript" />
+		</body>
+	</ui:insert>
+</html>

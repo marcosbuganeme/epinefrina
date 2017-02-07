@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html lang="pt" xmlns:p="http://primefaces.org/ui"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<div class="container-fluid agendamento">
+	<div class="pre-header">
+		<div class="col-md-3"></div>
+
+		<div class="col-md-9"></div>
+	</div>
+
+	<header class="row">
+		<div class="col-md-3">
+			<nav class="menu"></nav>
+		</div>
+
+		<div class="col-md-6 marca">
+			<img class="logo" jsf:library="img" jsf:name="logo_encaixe-me.png" />
+		</div>
+
+		<div class="col-md-3">
+			<div class="side-menu">
+				<div class="user-logged">
+					<h6>Login #{usuarioBean.loginUsuarioAssistido()}</h6>
+					<a class="pull-right"
+						href="#{facesContext.externalContext.requestContextPath}/j_spring_security_logout"
+						style="margin-top: 5%" title="Clique para sair do sistema">Sair</a>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<section class="row info-pag">
+		<div class="col-md-3 back">
+			<a href="javascript:window.history.back();"> 
+				<img
+					alt="Botão para voltar a página" jsf:library="img"
+					jsf:name="back.png" />
+			</a>
+		</div>
+
+		<div class="col-md-6">
+			<h1>Meus agendamentos</h1>
+		</div>
+
+		<div class="col-md-3"></div>
+	</section>
+
+	<section class="row">
+		<ol class="breadcrumb">
+		</ol>
+	</section>
+
+	<main class="row">
+		<div class="row filter">
+			<form class="form-agendamento" jsf:prependId="false">
+				<div class="col-md-2">
+					<label>Filtros</label>
+				</div>
+
+				<div class="col-md-2">
+					<h:selectOneMenu id="periodos" styleClass="form-control"
+						value="#{dashboardBean.form.filtro.periodo}">
+						<f:selectItem itemLabel="Todos os periodos"
+							noSelectionOption="true" />
+						<f:selectItems itemLabel="#{periodo.descricao}"
+							itemValue="#{periodo}" var="periodo"
+							value="#{dashboardBean.periodosDoDia()}" />
+						<p:ajax 
+							listener="#{dashboardBean.todosAgendamentos()}"
+							update="semanas agendamentos" />
+					</h:selectOneMenu>
+				</div>
+
+				<div class="col-md-2">
+					<h:selectOneMenu id="semanas" styleClass="form-control"
+						value="#{dashboardBean.form.filtro.semana}">
+						<f:selectItem 
+							itemLabel="Todos os dias da semana"
+							noSelectionOption="true" />
+						<f:selectItems 
+							itemLabel="#{semana.descricao}"
+							itemValue="#{semana}" 
+							var="semana"
+							value="#{dashboardBean.diasDaSemana()}" />
+						<p:ajax update="periodos agendamentos" />
+					</h:selectOneMenu>
+				</div>
+			</form>
+		</div>
+
+		<p:outputPanel id="agendamentos">
+			<form jsf:id="frm-resultado" jsf:prependId="false">
+				<p:dataScroller 
+					chunkSize="2"
+					var="agendamento"
+					value="#{dashboardBean.form.agendamentos}">
+
+					<div class="box-agendamento">
+						<div class="ag-title">
+							<div class="title">
+								<h3>
+									#{agendamento.id} - #{agendamento.titulo} - <span>#{agendamento.tipo}.</span>
+									<em>#{agendamento.planoSaudePaciente} - #{agendamento.cidade}</em>
+								</h3>
+							</div>
+						</div>
+
+						<div class="ag-detail">
+							<div class="ag-desc">
+								<h3 class="estab">#{agendamento.nomeFantasia}</h3>
+								<h4 class="cnpj">#{agendamento.cnpj}</h4>
+								<img
+									alt="Imagem do estabelecimento que forneceu a vaga para agendamento"
+									jsf:library="img" 
+									jsf:name="img-agend.jpg" />
+
+								<p class="desc">
+									<span>biografia: </span>#{agendamento.biografia}.
+								</p>
+
+								<p class="end">
+									<span>endereço:</span> #{agendamento.rua},
+									#{agendamento.bairro}, #{agendamento.complemento}
+								</p>
+
+								<p class="tel">
+									<span>telefone: </span>#{agendamento.contato}
+								</p>
+							</div>
+
+							<div class="ag-info">
+								<h5 class="dia">#{agendamento.semana}</h5>
+
+								<h4 class="data-hora">
+									<span>data: </span>#{agendamento.resultado}
+								</h4>
+
+								<p class="time">
+									<i class="fa fa-clock-o" aria-hidden="true" /> daqui <span>#{dashboardBean.dataResultado(agendamento.resultado)}
+										dias</span>
+								</p>
+
+								<h4 class="plano-saude">#{agendamento.planoSaudePaciente}</h4>
+
+								<div class="valor">
+									<h5>
+										<i class="fa fa-money" aria-hidden="true" /> #{agendamento.valor}
+									</h5>
+									<p>aproximadamente</p>
+								</div>
+
+								<h6 class="resultado-tempo">#{dashboardBean.dataResultado(agendamento.resultado)}dias</h6>
+							</div>
+
+							<div class="ag-cta">
+								<div class="bt-encontrar">
+									<p>encontrar</p>
+									<i class="fa fa-map-marker" aria-hidden="true"></i>
+								</div>
+
+								<div class="bt-cancelar">
+									<p>cancelar</p>
+									<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+								</div>
+							</div>
+						</div><!-- ag-detail -->
+					</div><!-- box-agendamento -->
+				</p:dataScroller>
+			</form>
+		</p:outputPanel> 
+	</main>
+</div>
+</html>
