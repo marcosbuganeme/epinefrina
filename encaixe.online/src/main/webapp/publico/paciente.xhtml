@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+
+<html lang="pt" xmlns:p="http://primefaces.org/ui"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<h:head>
+		<title>encaixe.online - Cadastro físico !!</title>
+	</h:head>
+
+	<h:body>
+		<p:ajaxStatus 
+			onstart="PF('statusDialog').show()" 
+			onsuccess="PF('statusDialog').hide()" />
+
+ 		<p:dialog 
+ 			widgetVar="statusDialog" 
+ 			modal="true" 
+ 			draggable="false" 
+ 			closable="false" 
+ 			resizable="false" 
+ 			showHeader="false">
+		        <p:graphicImage library="img" name="loading128x128.gif" />
+		</p:dialog>
+
+		<main>
+			<h:form>
+				<p:messages autoUpdate="true" closable="true" />
+
+				<p:panelGrid id="panelgrid-cadastro" columns="2" columnClasses="ui-g-6,ui-g-6" layout="grid" styleClass="ui-panelgrid-blank">
+					<p:panelGrid id="panelgrid-cadastro-paciente" columns="2" columnClasses="ui-g-2,ui-g-10" layout="grid" styleClass="ui-panelgrid-blank">
+						<p:outputLabel for="cpf" value="Cpf" />
+						<p:inputMask id="cpf" mask="999.999.999-99" placeholder="Numero de cpf" title="Informe seu número de cadastro de pessoa física" value="#{pacienteBean.paciente.cpf}" />
+
+						<p:outputLabel for="nome" value="Nome" />
+						<p:inputText id="nome" placeholder="Nome completo" title="Informe seu nome completo de acordo com o RG" value="#{pacienteBean.paciente.nome}" />
+
+						<p:outputLabel for="data-nascimento" value="Data de nascimento" />
+						<p:calendar id="data-nascimento" placeholder="Nascimento dia/mes/ano" title="Exemplo: 14/03/1989" value="#{pacienteBean.paciente.dataNascimento}" />
+
+						<p:outputLabel for="telefone" value="Telefone" />
+						<p:inputText id="telefone" placeholder="Número de contato" title="Informe seu número com ddd" value="#{pacienteBean.paciente.telefone}" />
+					</p:panelGrid>
+
+					<p:panelGrid id="panelgrid-cadastro-usuario" columns="2" columnClasses="ui-g-2,ui-g-10" layout="grid" styleClass="ui-panelgrid-blank">
+						<p:outputLabel for="email" value="E-mail" />
+						<p:inputText id="email" value="#{pacienteBean.usuario.email}" 
+							placeholder="E-mail"
+							title="Informe o e-mail para receber notificações"
+							type="text" />
+
+						<p:outputLabel for="senha" value="Senha" />
+						<p:password id="senha" value="#{pacienteBean.usuario.senha}" 
+							placeholder="Senha" title="Informe a senha para autenticação" />
+
+						<p:outputLabel for="contra-senha" value="Contra senha" />
+						<p:password id="contra-senha" value="#{pacienteBean.usuario.contraSenha}" 
+							placeholder="Contra senha" title="Confirme a senha para autenticação" />
+					</p:panelGrid>
+
+					<p:commandButton id="btn-salvar-paciente" action="#{pacienteBean.gravar()}" value="Gravar" />
+					<p:link id="btn-consulta" outcome="/publico/consulta" value="Consultar" title="Para quem tem interesse nos horários vagos" />
+				</p:panelGrid>
+			</h:form>
+		</main>
+	</h:body>
+</html>

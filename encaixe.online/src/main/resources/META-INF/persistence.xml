@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+	<persistence-unit name="encaixeonlinePU" transaction-type="RESOURCE_LOCAL">
+
+		<non-jta-data-source>java:comp/env/jdbc/encaixeonlineDS</non-jta-data-source>
+
+		<properties>
+<!-- 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://mysql.encaixe.online:3306/encaixe01?autoReconnect=true&amp;useSSL=false"/> -->
+<!-- 			<property name="javax.persistence.jdbc.user" value="encaixe01"/> -->
+<!-- 			<property name="javax.persistence.jdbc.password" value="markin123"/> -->
+<!-- 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/> -->
+		
+			<property name="javax.persistence.schema-generation.database.action" value="none" />
+
+			<!-- configuração do sql no console -->
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
+
+			<!-- Configuração do cache -->
+			<property name="hibernate.cache.use_second_level_cache" value="true"/>
+			<property name="hibernate.cache.use_query_cache" value="true" />
+			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+		</properties>
+	</persistence-unit>
+</persistence>
